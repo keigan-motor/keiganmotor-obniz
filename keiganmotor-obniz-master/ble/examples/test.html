@@ -1,0 +1,86 @@
+<!-- HTML Example -->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://obniz.io/js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/obniz@latest/obniz.js"></script> 
+    
+    <script src="https://raw.githubusercontent.com/keigan-motor/keiganmotor-obniz/master/ble/src/keiganmotor_obniz_ble.js"></script>
+</head>
+
+<body>
+
+    <div id="obniz-debug"></div>
+    <h1>KeiganMotor</h1>
+    <script>
+
+        var obniz = new Obniz("8898-0635");
+
+        obniz.onconnect = async function () {
+
+            console.log("Start!");
+
+            // KeiganMotor のスキャン条件
+            var target = {
+                uuids: ["f140ea3589364d35a0eddfcd795baa8c"],     // KeiganMotor のサービスuuidを含むperipheralをスキャンします
+                localName: "KM-1U 5DKW#9FB"                     // KeiganMotor のデバイスネームを指定します（全てのKeiganMotor をスキャンする場合はコメントアウト）
+            };
+
+            var peripheral = await obniz.ble.scan.startOneWait(target);
+            console.log("Scanning KeiganMotor...");
+
+
+            if (peripheral) {
+
+                var connected = await peripheral.connectWait();
+
+                if (connected) {
+                    console.log("connected");
+                    await obniz.wait(1000);
+
+                    var m = new KeiganMotorBLE(peripheral);
+
+
+                    // 速度制御
+                    m.enable();
+                    m.speedRpm(100);
+                    m.runForward();
+
+                    obniz.display.print("Run")
+                    await obniz.wait(10000);
+                    m.stop();
+                    obniz.display.clear();
+                    obniz.display.print("Stop")
+
+                    /*
+                     obniz.display.print("before")
+ 
+                     function cb(motor, pos, vel, trq) {
+                         console.log("cb");
+                         console.log(motor, pos, vel, trq);
+                     }
+ 
+                     m.onReceivedMotorMeasNotify(cb);
+ 
+                     obniz.display.print("after")
+                     */
+                     
+
+
+                }
+            }
+
+
+        }
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
