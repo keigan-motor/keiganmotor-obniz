@@ -42,57 +42,65 @@
             obniz.display.clear();
             obniz.display.print("KeiganMotor I2C");
 
-            obniz.io0.output(false);
-            obniz.i2c0.start({ mode: "master", sda: 2, scl: 3, clock: 400000 });
+            obniz.io0.output(false); //GNDはobnizの0ポートに対応されます
+            obniz.i2c0.start({ mode: "master", sda: 2, scl: 3, clock: 400000 }); //sdaはobnizの2ポートに、sclは3ポートに対応されます
 
             var m = new KeiganMotorI2C(0x20); // default address: 0x20
 
 
-            $('#enable').click(function () {
+            $('#enable').click(function () {  
+                /*enableボタンが押されたら、KeiganMotorが作動できるようになり、obnizのディスプレイに“enable”が映します*/
                 m.enable();
                 obniz.display.clear();
                 obniz.display.print("enable");
 
             });
 
-            $('#disable').click(function () {
+            $('#disable').click(function () {　
+                /*disableボタンが押されたら、KeiganMotorの作動が停止し、obnizのディスプレイに“disable”が映します*/
                 m.disable();
                 obniz.display.clear();
                 obniz.display.print("disable");
 
             });
 
-            $('#run').click(function () {
+            $('#run').click(function () {　
+                /*runボタンが押されたら、KeiganMotorが正回転(反時計回り)します。obnizのディスプレイに“run”が映します*/
                 m.runAtRpm(10)
                 obniz.display.clear();
                 obniz.display.print("run");
             });
 
-            $('#stop').click(function () {
+            $('#stop').click(function () { 
+                /*stopボタンが押されたら、KeiganMotorの回転が停止します。obnizのディスプレイに“stop”が映します*/
                 m.stop()
                 obniz.display.clear();
                 obniz.display.print("stop");
             });
 
             $('#moveBy').click(function () {
-                m.moveByDegree(45);
+                /*movebyボタンが押されたら、KeiganMotorが入力した絶対位置に回転します。obnizのディスプレイに“moveby”が映します*/
+                m.moveByDegree(45);　//ここで絶対位置を設定して下さい
                 obniz.display.clear();
                 obniz.display.print("moveBy");
             });
 
-            $('#red').click(function () {
+            $('#red').click(function () {　
+                /*redボタンが押されたら、KeiganMotorのLEDの色が赤になります。obnizのディスプレイに“led red”が映します*/
                 m.led(LedState.ON_SOLID, 255, 0, 0)
                 obniz.display.clear();
                 obniz.display.print("led red");
             });
 
-            $('#green').click(function () {
+            $('#green').click(function () {　
+                /*greenボタンが押されたら、KeiganMotorのLEDの色が緑になります。obnizのディスプレイに“led green”が映します*/
                 m.led(LedState.ON_SOLID, 0, 255, 0)
                 obniz.display.clear();
                 obniz.display.print("led green");
             });
 
-            $('#blue').click(function () {
+            $('#blue').click(function () {　
+                /*blueボタンが押されたら、KeiganMotorのLEDの色が青になります。obnizのディスプレイに“led blue”が映します*/
                 m.led(LedState.ON_SOLID, 0, 0, 255)
                 obniz.display.clear();
                 obniz.display.print("led blue");
